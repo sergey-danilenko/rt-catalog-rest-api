@@ -1,0 +1,19 @@
+app:
+  name: Renter's Tenant Catalog
+bot:
+  token: YOUR BOT TOKEN
+db:
+  type: sqlite
+#  type: postgresql
+#  host: localhost
+#  port: 5432
+#  user: postgres
+#  password: postgres
+  connector: aiosqlite
+#  connector: asyncpg
+  dbname: rt_catalog.sqlite3
+  echo: false
+  pool_pre_ping: false
+api:
+  auth:
+    static_key: YourStaticKey

@@ -1,0 +1,15 @@
+.idea/
+.github/
+.*ignore
+README.md
+__pycache__
+venv/
+.env*
+docker-compose*.yml
+Dockerfile
+*.service
+*.db
+*.db*
+docs/
+config_dist/
+*.sqlite3

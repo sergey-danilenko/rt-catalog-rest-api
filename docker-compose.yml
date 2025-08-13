@@ -1,0 +1,71 @@
+
+services:
+  app:
+    build: .
+    container_name: "${ENV_NAME}"
+    restart: always
+    volumes:
+      - type: bind
+        source: ./config/
+        target: /app/api/config/
+        read_only: true
+      - type: bind
+        source: ./test_data/
+        target: /test_data/
+        read_only: true
+      - type: bind
+        source: ./rt_catalog.sqlite3
+        target: /app/rt_catalog.sqlite3
+    ports:
+      - "127.0.0.1:${EXPOSED_PORT:-8001}:8000"
+    environment:
+      - DATA_PATH=/data
+    entrypoint: ["python", "-m", "app.__main__"]
+    deploy:
+      resources:
+        reservations:
+          memory: 250M
+          cpus: "0.01"
+        limits:
+          memory: 800M
+          cpus: "0.15"
+
+  migrations:
+    build: .
+    profiles:
+      - "migrate"
+    restart: "no"
+    volumes:
+      - type: bind
+        source: ./config/
+        target: /app/api/config/
+        read_only: true
+      - type: bind
+        source: ./alembic.ini
+        target: /app/alembic.ini
+        read_only: true
+      - type: bind
+        source: ./rt_catalog.sqlite3
+        target: /app/rt_catalog.sqlite3
+    environment:
+      - DATA_PATH=/data
+    entrypoint: ["alembic", "upgrade", "head"]
+
+  fill_test_data:
+    build: .
+    profiles:
+      - "migrate"
+    restart: "no"
+    volumes:
+      - type: bind
+        source: ./test_data/
+        target: /test_data/
+        read_only: true
+      - type: bind
+        source: ./rt_catalog.sqlite3
+        target: /app/rt_catalog.sqlite3
+    depends_on:
+      - migrations
+    environment:
+      - DATA_PATH=/data
+    entrypoint: ["python", "-m", "test_data.fill_test_data"]

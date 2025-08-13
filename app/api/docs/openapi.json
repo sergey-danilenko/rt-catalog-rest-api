@@ -1,0 +1,1062 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Тестовое REST API приложение: Renter's Tenant Catalog",
+    "description": "\n        Взаимодействие с пользователем посредством HTTP запросов к API серверу\n        с использованием статического API ключа.\n        Все ответы в формате JSON.\n        ",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/org/v0/search/by-name/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Поиск организации по названию",
+        "description": "Возвращает организацию по её названию.",
+        "operationId": "organization_by_name_api_org_v0_search_by_name__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Название организации (полное)",
+              "title": "Name"
+            },
+            "description": "Название организации (полное)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Организация не найдена",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/building/address/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Список всех организаций находящихся в конкретном здании по адресу здания",
+        "description": "Список организаций по адресу здания.",
+        "operationId": "organizations_by_building_address_api_org_v0_building_address__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Город",
+              "title": "City"
+            },
+            "description": "Город"
+          },
+          {
+            "name": "street",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Улица",
+              "title": "Street"
+            },
+            "description": "Улица"
+          },
+          {
+            "name": "house",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Дом",
+              "title": "House"
+            },
+            "description": "Дом"
+          },
+          {
+            "name": "office",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Офис",
+              "title": "Office"
+            },
+            "description": "Офис"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  },
+                  "title": "Response Organizations By Building Address Api Org V0 Building Address  Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/building/by-radius/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Список организаций в радиусе, относительно указанной точки на карте",
+        "description": "Список организаций в радиусе от точки.",
+        "operationId": "organizations_by_radius_api_org_v0_building_by_radius__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "center_lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Широта центра",
+              "title": "Center Lat"
+            },
+            "description": "Широта центра"
+          },
+          {
+            "name": "center_lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Долгота центра",
+              "title": "Center Lon"
+            },
+            "description": "Долгота центра"
+          },
+          {
+            "name": "radius",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Радиус поиска в километрах",
+              "title": "Radius"
+            },
+            "description": "Радиус поиска в километрах"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  },
+                  "title": "Response Organizations By Radius Api Org V0 Building By Radius  Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/building/by-rect/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Список организаций в прямоугольной области, относительно указанной точки на карте",
+        "description": "Список организаций в прямоугольной области.",
+        "operationId": "organizations_by_rect_api_org_v0_building_by_rect__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "lat_min",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Минимальная широта",
+              "title": "Lat Min"
+            },
+            "description": "Минимальная широта"
+          },
+          {
+            "name": "lat_max",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Максимальная широта",
+              "title": "Lat Max"
+            },
+            "description": "Максимальная широта"
+          },
+          {
+            "name": "lon_min",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Минимальная долгота",
+              "title": "Lon Min"
+            },
+            "description": "Минимальная долгота"
+          },
+          {
+            "name": "lon_max",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "description": "Максимальная долгота",
+              "title": "Lon Max"
+            },
+            "description": "Максимальная долгота"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  },
+                  "title": "Response Organizations By Rect Api Org V0 Building By Rect  Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/activity/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Список всех организаций, которые относятся к указанному виду деятельности",
+        "description": "Список организаций по виду деятельности.",
+        "operationId": "organizations_by_activity_api_org_v0_activity__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Название вида деятельности",
+              "title": "Activity Name"
+            },
+            "description": "Название вида деятельности"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  },
+                  "title": "Response Organizations By Activity Api Org V0 Activity  Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/activity/tree/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Поиск организаций по виду деятельности",
+        "description": "Например, поиск по виду деятельности «Еда», которая находится на первом \n        уровне дерева, и чтобы нашлись все организации, которые относятся \n        к видам деятельности, лежащим внутри. \n        Т.е. в результатах поиска должны отобразиться организации \n        с видом деятельности Еда, Мясная продукция, Молочная продукция.\n        \n        Уровень вложенности деятельностей ограничен 3 уровням",
+        "operationId": "organizations_by_activity_tree_api_org_v0_activity_tree__get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Название вида деятельности",
+              "title": "Activity Name"
+            },
+            "description": "Название вида деятельности"
+          },
+          {
+            "name": "depth",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 3,
+              "minimum": 1,
+              "description": "Глубина вложенности (максимум 3)",
+              "default": 3,
+              "title": "Depth"
+            },
+            "description": "Глубина вложенности (максимум 3)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  },
+                  "title": "Response Organizations By Activity Tree Api Org V0 Activity Tree  Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/building/{id}/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Список всех организаций находящихся в конкретном здании по ID здания",
+        "description": "Список организаций в заданном здании.",
+        "operationId": "organizations_by_building_id_api_org_v0_building__id___get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID здания",
+              "title": "Id"
+            },
+            "description": "ID здания"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Organization"
+                  },
+                  "title": "Response Organizations By Building Id Api Org V0 Building  Id   Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/org/v0/{id}/": {
+      "get": {
+        "tags": [
+          "Organizations"
+        ],
+        "summary": "Вывод информации об организации по её идентификатору",
+        "description": "Возвращает полную информацию об организации по её идентификатору.",
+        "operationId": "organization_by_id_api_org_v0__id___get",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID организации",
+              "title": "Id"
+            },
+            "description": "ID организации"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Пользователь не авторизован",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Invalid or missing API Key"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Ошибка валидации входных данных",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": [
+                    {
+                      "loc": [
+                        "string",
+                        0
+                      ],
+                      "msg": "string",
+                      "type": "string"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Организация не найдена",
+            "content": {
+              "application/json": {
+                "example": {
+                  "detail": "Not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Activity": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "create_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Create Date"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "organizations": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Organization"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organizations"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Activity"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "children": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Activity"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Children"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "create_date"
+        ],
+        "title": "Activity"
+      },
+      "Building": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "city": {
+            "type": "string",
+            "title": "City"
+          },
+          "street": {
+            "type": "string",
+            "title": "Street"
+          },
+          "house": {
+            "type": "string",
+            "title": "House"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "create_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Create Date"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region"
+          },
+          "postal_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Postal Code"
+          },
+          "block": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Block"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "organizations": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Organization"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organizations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "city",
+          "street",
+          "house",
+          "lat",
+          "lon",
+          "create_date"
+        ],
+        "title": "Building"
+      },
+      "Organization": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "inn": {
+            "type": "string",
+            "title": "Inn"
+          },
+          "create_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Create Date"
+          },
+          "building_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Building Id"
+          },
+          "office": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Office"
+          },
+          "phones": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PhoneNumber"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phones"
+          },
+          "activities": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Activity"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activities"
+          },
+          "building": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Building"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "inn"
+        ],
+        "title": "Organization"
+      },
+      "PhoneNumber": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "number": {
+            "type": "string",
+            "title": "Number"
+          },
+          "organization_id": {
+            "type": "integer",
+            "title": "Organization Id"
+          },
+          "organization": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Organization"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "number",
+          "organization_id"
+        ],
+        "title": "PhoneNumber"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "description": "Укажите ваш статический API ключ для доступа к API",
+        "in": "header",
+        "name": "X-API-KEY"
+      }
+    }
+  }
+}
