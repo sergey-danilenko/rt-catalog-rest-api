@@ -97,7 +97,7 @@ python -m app.__main__
 
 2. Откройте браузер и перейдите по адресу:
 http://localhost:8000/docs — Swagger UI
-
+[Подробнее](#api-documentation)
 ---
 
 ## Запуск через докер
@@ -122,7 +122,8 @@ docker-compose up -d app
 ```
 
 2. Откройте браузер и перейдите по адресу:
-http://localhost:8001/docs — Swagger UI
+http://localhost:8001/docs — Swagger UI.
+[Подробнее](#api-documentation)
 
 ---
 
@@ -155,7 +156,7 @@ docker compose down
 
 ---
 
-## API Документация
+## API Документация {#api-documentation}
 
 Вся документация API доступна в Swagger UI:
 
