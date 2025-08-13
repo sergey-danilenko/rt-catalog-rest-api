@@ -156,8 +156,7 @@ docker compose down
 
 ---
 
-## API Документация {#api-documentation}
-
+## <a id="api-documentation"></a> API Документация
 Вся документация API доступна в Swagger UI:
 
 http://localhost:8000/docs 
